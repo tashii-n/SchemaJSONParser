@@ -16,3 +16,9 @@ services:
     env_file:
       - .env
     working_dir: /app
+    networks:
+      - database_default
+
+networks:
+  database_default:
+    external: true
