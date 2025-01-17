@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <title>Schema JSON Parser</title>
+  </head>
+  <body>
+    <div class="container p-5">
+      <h1>Schema JSON Parser</h1>
+      <form method="POST" enctype="multipart/form-data" class="mt-5">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="schemaInput" class="form-label">Schema URL</label>
+          <input
+            type="text"
+            class="form-control"
+            id="schemaInput"
+            name="schema_url"
+            placeholder="Enter the schema URL"
+            required
+          />
+        </div>
+
+        <!-- Organization Dropdown -->
+        <div class="mb-3">
+          <label for="organisationSelect" class="form-label">Select Organization</label>
+          <select class="form-control" id="organisationSelect" name="organisation_id" required>
+            <option value="">Select an organization</option>
+            {% for org in organisations %}
+              <option value="{{ org.id }}">{{ org.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="ledgerInput" class="form-label">Ledger ID</label>
+          <input
+            required
+            type="text"
+            class="form-control"
+            id="ledgerInput"
+            name="ledgerID"
+            placeholder="Enter the Ledger ID"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary col-2 mt-2" name="submit_type" value="single">Submit</button>
+        
+      </form>
+
+      <div class="mt-5">
+        {% if error_message %}
+          <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+          </div>
+        {% endif %}
+        
+        {% if schema_name %}
+          <h3>Schema Details</h3>
+          <ul>
+            <li><strong>Schema Name:</strong> {{ schema_name }}</li>
+            <li><strong>Version:</strong> {{ version }}</li>
+            <li><strong>Schema Ledger ID:</strong> {{ schemaLedgerId }}</li>
+            <li><strong>Publisher DID:</strong> {{ publisherDid }}</li>
+            <li><strong>Issuer ID:</strong> {{ issuerId }}</li>
+            <li><strong>ID:</strong> {{ id }}</li>
+            <li><strong>Organisation ID:</strong> {{ orgId }}</li>
+            <li><strong>Created By:</strong> {{ createdBy }}</li>
+            <li><strong>Last Changed By:</strong> {{ lastChangedBy }}</li>
+            <li><strong>Ledger ID:</strong> {{ ledgerId }}</li>
+            <li><strong>Type:</strong> {{ type }}</li>
+            <li><strong>Created at:</strong> {{ createDateTime }}</li>
+            <li><strong>Last changed:</strong> {{ lastChangedDateTime }}</li>
+          </ul>
+        {% endif %}
+        
+        {% if attributes %}
+          <h3>Schema JSON Response</h3>
+          <h5>{{ schema_data.title }}</h5>
+          <pre class="bg-light p-3 rounded text-break">{{ attributes }}</pre>
+        {% endif %}
+
+        {% if file_results %}
+          <h3>Batch Schema JSON Responses</h3>
+          {% for name, schema in file_results.items %}
+            <h5>{{ name }}</h5>
+            <pre class="bg-light p-3 rounded">{{ schema }}</pre>
+          {% endfor %}
+        {% endif %}
+      </div>
+      
+    </div>
+  </body>
+</html>
