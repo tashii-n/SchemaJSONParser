@@ -36,7 +36,7 @@ def extract_version(url):
     # Split the URL by slashes and retrieve the middle part
     parts = url.strip('/').split('/')
 
-    print("URL:", url)
+    # print("URL:", url)
     # Check if there is a middle part and return it
     if len(parts) > 2:
         middle_value = parts[3]  # This would get the version, e.g., 'draft-07'
